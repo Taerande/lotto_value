@@ -1,14 +1,14 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-const Home = () => import(/* webpackChunkName: "423123" */ '@/components/Home.vue');
+const Home = () => import(/* webpackChunkName: "lotto_value" */ '@/components/Home.vue');
 
 
 Vue.use(VueRouter);
 const routes = [
     {
         path:'/',
-        name:'Home2',
+        name:'Home',
         component: Home,
     },
 ]

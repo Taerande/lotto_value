@@ -1,11 +1,11 @@
 <template>
-  <v-container fluid style="height:100vh;">
-    <v-row class="pt-16 d-flex justify-center">
+  <v-container fluid fill-height>
+    <v-row class="d-flex justify-center">
       <div class="text-h2 font-weight-bold">
         Lotto Value
       </div>
     </v-row>
-    <v-row style="width:500px;" class="d-flex mx-auto justify-center align-center px-16">
+    <v-row style="max-width:500px;" class="d-flex mx-auto justify-center align-center">
       <v-col v-for=" i in 45" :key="i + 'randNum'" cols="12" class="col5 d-flex justify-center pa-0 py-2">
         <div class="d-flex white--text justify-center align-center rounded-circle d-inline-block text-h6 font-weight-bold" style="width:50px;height:50px;cursor: pointer;" :class="ballColor(i)" @click="toggleNum(i)">
           <v-icon color="green" style="position:absolute" x-large v-if="numList.findIndex((num) => num === i) > -1">mdi-check</v-icon>
@@ -13,7 +13,7 @@
         </div>
       </v-col>
     </v-row>
-    <v-row class="d-flex justify-center pt-10">
+    <v-row class="d-flex justify-center pt-5">
       <div v-for="item in numList" :key="item + 'num'" class="px-1">
         <div class="d-flex justify-center align-center rounded-circle d-inline-block text-h6 font-weight-bold" style="width:50px;height:50px;cursor: pointer;" :class="ballColor(item)" @click="toggleNum(item)">
           {{item}}
@@ -24,10 +24,29 @@
         </div>
       </div>
     </v-row>
-    <v-row class="d-flex justify-center py-3">
-      <v-btn color="error" width="150" max-width="150" class="mx-1" @click="randLotto()">랜덤</v-btn>
-      <v-btn color="error" width="150" max-width="150" class="mx-1" @click="resetData()" :disabled="numList.length === 0">초기화</v-btn>
-      <v-btn color="success" width="150" max-width="150" class="mx-1" @click="checkLotto()" :disabled="numList.length !== 6" :loading="loading">조회</v-btn>
+    <v-row class="d-flex justify-center py-1">
+      <v-btn v-ripple :block="$vuetify.breakpoint.smAndDown" color="primary" width="150" max-width="150" class="mx-1 my-1" @click="randLotto()">
+        <div class="d-flex justify-space-between align-center" style="width:70px;">
+          <v-icon>mdi-shuffle</v-icon>
+          <span>랜</span>
+          <span>덤</span>
+        </div>
+      </v-btn>
+      <v-btn v-ripple :block="$vuetify.breakpoint.smAndDown" color="error" width="150" max-width="150" class="mx-1 my-1" @click="resetData()" :disabled="numList.length === 0">
+        <div class="d-flex justify-space-between align-center" style="width:70px;">
+          <v-icon>mdi-refresh</v-icon>
+          <span>초</span>
+          <span>기</span>
+          <span>화</span>
+        </div>
+      </v-btn>
+      <v-btn v-ripple :block="$vuetify.breakpoint.smAndDown" color="success" width="150" max-width="150" class="mx-1 my-1" @click="checkLotto()" :disabled="numList.length !== 6" :loading="loading">
+        <div class="d-flex justify-space-between align-center" style="width:70px;">
+          <v-icon>mdi-magnify</v-icon>
+          <span>조</span>
+          <span>회</span>
+        </div>
+      </v-btn>
     </v-row>
     <v-dialog v-model="dialog" max-width="800">
       <v-card class="mx-auto">
@@ -38,9 +57,12 @@
           <div v-for="prize in result" :key="prize.no + 'prize'" class="py-1 d-flex justify-center">
             <div :class="prizeColorSet[prize.rank-1]" class="d-inline mx-auto">
               {{prize.no}}회차 ({{prize.date}})
-              {{prize.rank}}등 : {{prize.prize}}원
+              {{ prizeEmo[prize.rank-1] }} {{prize.rank}}등 : {{prize.prize}}원
             </div>
+            <div>
+              {{lottodb[prize.no-1].dr1}} / {{lottodb[prize.no-1].dr2}} / {{lottodb[prize.no-1].dr3}} / {{lottodb[prize.no-1].dr4}} / {{lottodb[prize.no-1].dr5}} / {{lottodb[prize.no-1].dr6}}
             </div>
+          </div>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -59,6 +81,7 @@ import db from '@/assets/lottoDB.json'
         dialog: false,
         loading: false,
         lottodb: db,
+        prizeEmo:['🥇','🥈','🥉','🏅','🎖'],
         numList:[],
         colorSet:["yellow darken-2", "light-blue lighten-3","red lighten-1","blue-grey lighten-3","light-green lighten-1"],
         result:[],
