@@ -1,5 +1,12 @@
 # lotto-value
 
+## Stacks
+```
+1. Vue
+2. Vuetify
+3. Firebase
+```
+
 ## Project setup
 ```
 npm install
